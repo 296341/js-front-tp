@@ -19,11 +19,13 @@
 			<input type="submit" value="Submit" />
 		</form>
 
+        <br>
+
         <script>
 
             const currentToken = localStorage.getItem('token');
             
-				var posts =  fetch('http://localhost:3000/posts', {
+				var posts =  fetch('http://localhost:3000/posts',{
 					method: 'GET',
 					headers: {
                         'Authorization': currentToken
@@ -37,10 +39,11 @@
 
                 function displayPosts(data) {
                  const Test = data.forEach(element => {
-                    document.getElementById("post-p").innerHTML += element.title +""+ element.content +"<br>";
+                    document.getElementById("post-p").innerHTML += element.title + ": " + element.content +"<br>";
                  });
  
                 } 
+
 
 
 
@@ -52,10 +55,11 @@
 				const title = document.getElementById('title').value
 				const content = document.getElementById('content').value
 
-				const result = await fetch('http://localhost:3000/posts', {
+				const result = await fetch("http://localhost:3000/posts/", {
 					method: 'POST',
 					headers: {
-						'Authorization': currentToken
+                        'content-type': 'application/json',
+						Authorization: currentToken
 					},
 					body: JSON.stringify({
 						title,
@@ -66,13 +70,12 @@
 
 				if (result != null) {
                     console.log(result)
-					//alert('Success')
-                    window.location.reload()
+					alert('Success')
+                    window.location.replace("home.html");
 				} else {
-					//alert(result.error)
+					alert(result.error)
 				}
 			}
-
 
 
 		</script>
