@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login</title>
+	</head>
+	<body>
+
+        <h1>Welcome</h1>
+
+        <div id="post-p"></div>
+
+        <br>
+
+        <form id="post-form">
+			<input type="text" autocomplete="off" id="title" placeholder="title" />
+			<input type="text" autocomplete="off" id="content" placeholder="content" />
+			<input type="submit" value="Submit" />
+		</form>
+
+        <script>
+
+            const currentToken = localStorage.getItem('token');
+            
+				var posts =  fetch('http://localhost:3000/posts', {
+					method: 'GET',
+					headers: {
+                        'Authorization': currentToken
+					},
+
+				})
+                .then((res) => res.json())
+                .then(data => {console.log(data);
+                displayPosts(data)})
+
+
+                function displayPosts(data) {
+                 const Test = data.forEach(element => {
+                    document.getElementById("post-p").innerHTML += element.title +""+ element.content +"<br>";
+                 });
+ 
+                } 
+
+
+
+            const form = document.getElementById('post-form')
+			form.addEventListener('submit', savePost)
+
+			async function savePost(event) {
+				event.preventDefault()
+				const title = document.getElementById('title').value
+				const content = document.getElementById('content').value
+
+				const result = await fetch('http://localhost:3000/posts', {
+					method: 'POST',
+					headers: {
+						'Authorization': currentToken
+					},
+					body: JSON.stringify({
+						title,
+						content
+						
+					})
+				}).then((res) => res.json())
+
+				if (result != null) {
+                    console.log(result)
+					//alert('Success')
+                    window.location.reload()
+				} else {
+					//alert(result.error)
+				}
+			}
+
+
+
+		</script>
+
+
+    </body>
+</html>
